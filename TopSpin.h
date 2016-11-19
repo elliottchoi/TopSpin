@@ -6,8 +6,8 @@ using namespace std;
 //Abstract Class
 class TopSpinADT {
 public:
-	virtual void shiftLeft() = 0;
-	virtual void shiftRight() = 0;
+	virtual void shiftLeft(int) = 0;
+	virtual void shiftRight(int) = 0;
 	virtual void spin() = 0;
 	virtual bool isSolved() = 0;
 };
@@ -39,10 +39,16 @@ public:
 	int gameSize = 0;
 	int mechanismSpinSize = 0;
 	Node  *mechanismStart = 0;
+	Node *mechanismEnd = 0;
 	CircularDoublyLinkedList<int>board; 
 	//Top Spin Functions
 	TopSpin(int size, int spinSize);
 	int getSize();
+	//Overriding functions 
+	virtual void shiftLeft(int numberOfShifts);
+	virtual void shiftRight(int numberOfShifts);
+	virtual void spin();
+	virtual bool isSolved();
 
 
 //Iterator Class
@@ -58,10 +64,9 @@ public:
 		int getValue() { return m_ptr->Value; }
 		void setValue(int val) { m_ptr->Value = val; }
 	};
-
 	// linked list objects create forward-traversal iterators using the two functions below
 	Iterator begin() { return Iterator(mechanismStart); }
-	Iterator end() { return Iterator(nullptr); }
+	Iterator end() { return Iterator(mechanismEnd); }
 };
 
 
