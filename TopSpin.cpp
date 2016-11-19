@@ -1,72 +1,71 @@
-#pragma once
-#include "CircularDoublyLinkedList.h"
+#include "TopSpin.h"
 #include <iostream>
 using namespace std;
 
-//Abstract Class
-class TopSpinADT {
-public:
-	virtual void shiftLeft(int) = 0;
-	virtual void shiftRight(int) = 0;
-	virtual void spin() = 0;
-	virtual bool isSolved() = 0;
-};
-
-class TopSpin:public TopSpinADT
+TopSpin::TopSpin(int size, int spinSize)
 {
-private:
-	//Node Class
-	class Node {
-	public:
-		//Node Constructor 
-		Node(int val, Node* nx = NULL, Node* prv = NULL) :Value(val), next(nx), previous(prv)
-		{
-			if (previous)
-			{
-				previous->next = this;
-			}
-			if (next)
-			{
-				next->previous = this;
-			}
-		}
-		int Value;
-		Node*next;
-		Node*previous;
-	};
-public:
-	//Top spin member variables
-	int gameSize = 0;
-	int mechanismSpinSize = 0;
-	Node *mechanismStart = 0;
-	Node *mechanismEnd = 0;
-	CircularDoublyLinkedList<int>board; 
-	//Top Spin Functions
-	TopSpin(int size, int spinSize);
-	int getSize();
-	//Overriding functions 
-	virtual void shiftLeft(int numberOfShifts);
-	virtual void shiftRight(int numberOfShifts);
-	virtual void spin();
-	virtual bool isSolved();
+	//Checks params if they are within bounds
+	if (size<1 || spinSize>size)
+	{
+		gameSize = 20;
+		spinSize = 4;
+	}
+	//Adjust params to user inputted params
+	else
+	{
+		gameSize = size;
+		mechanismSpinSize = spinSize;
+	}
+	
+	//Adding values to List
+	for (int x = 1; x <= size; x++)
+	{
+		board.addItem(x);
+	}
+	//Setting up the begining spin node 
+	mechanismStart = mechanismEnd=board.getHead;
+	//Setting up the spin end node 
+	for (int x = 0; x < spinSize; x++)
+	{
+		mechanismEnd = mechanismEnd->next;
+	}
+}
+int TopSpin::getSize()
+{
+	return gameSize;
+}
+void TopSpin::shiftLeft(int numberOfShifts)
+{
+	//Shift the start of the mechnaism 
+	for (int x = 0; x < numberOfShifts; x++)
+	{
+		mechanismStart = mechanismStart->next;
+	}
+	mechanismEnd = mechanismStart;
+	//Establish the Mech location
+	for (int x = 0; x < mechanismSpinSize; x++)
+	{
+		mechanismEnd = mechanismEnd->next;
+	}
+}
+void TopSpin::shiftRight(int numberOfShifts)
+{
+	//Shift the start of the mechnaism 
+	for (int x = 0; x < numberOfShifts; x++)
+	{
+		mechanismStart = mechanismStart->previous;
+	}
+	mechanismEnd = mechanismStart;
+	//Establish the Mech location
+	for (int x = 0; x < mechanismSpinSize; x++)
+	{
+		mechanismEnd = mechanismEnd->previous;
+	}
+}
+void TopSpin::spin()
+{
+}
+bool TopSpin::isSolved()
+{
 
-
-//Iterator Class
-public:
-	class Iterator {// iterators are used for efficient traversal of linked lists
-	private:
-		Node* m_ptr;    // an iterator hides a pointer to node
-	public:
-		Iterator(Node* ptr) { m_ptr = ptr; }
-		void operator++ () { m_ptr = m_ptr->next; } // for forward traversing, e,g, Iterator i=begin(); ... ++i;
-		bool operator != (const Iterator& b) { return m_ptr != b.m_ptr; }
-		int operator *() { return m_ptr->Value; }
-		int getValue() { return m_ptr->Value; }
-		void setValue(int val) { m_ptr->Value = val; }
-	};
-	// linked list objects create forward-traversal iterators using the two functions below
-	Iterator begin() { return Iterator(mechanismStart); }
-	Iterator end() { return Iterator(mechanismEnd); }
-};
-
-
+}
