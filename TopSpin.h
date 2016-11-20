@@ -151,11 +151,19 @@ bool TopSpin::isSolved()
 ostream &operator << (ostream &os, const TopSpin& ts)
 {
 	CircularDoublyLinkedList<int>::Iterator start = (ts.board).begin();
-	for (int x = 0; x < ts.gameSize; x++, ++start)
+	cout << "|| ";
+	for (int x = 0; x < ts.mechanismSpinSize; ++x, ++start)
 	{
 		os << start.getValue() << " ";
-		cout << endl;
 		return os;
 	}
+	cout << " || ";
+	++start;
+	int newStart = ts.mechanismSpinSize;
+	newStart++; 
+	for (int x = newStart; x < ts.gameSize; ++x, ++start)
+	{
+		os << start.getValue()<<" ";
+	}
+	return os; 
 }
-
