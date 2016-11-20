@@ -156,7 +156,7 @@ ostream& operator << (ostream& os, const TopSpin& ts)
 		cout << "---";
 	cout << "|" << endl;
 
-	for (int x = 0; x < s.gameSize; x++, ++start)
+	for (int x = 0; x < ts.gameSize; x++, ++start)
 	{
 		if (x == 0 || x==ts.mechansimSpinSize)
 			cout << "| ";
