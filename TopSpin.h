@@ -98,7 +98,7 @@ void TopSpin::spin()
 	for (int x = 1; x < mechanismSpinSize; x++)
 	{
 		//Positions the end node to nth node of the spin mechanism 
-		spinEnd++;
+		++spinEnd;
 	}
 
 	//Only need to transvere 1/2 of the list 
@@ -129,14 +129,14 @@ bool TopSpin::isSolved()
 		}
 		else
 		{
-			begin++;
+			++begin;
 		}
 	}
 
 	//Now check for pos 2.....gameSize
-	begin++;
+	++begin;
 	int reverseCounter = gameSize;
-	for (int check = 2; check <= gameSize; check++, begin++, reverseCounter--)
+	for (int check = 2; check <= gameSize; check++, ++begin, reverseCounter--)
 	{
 		if (check != begin.getValue() && reverseCounter != begin.getValue())
 		{
