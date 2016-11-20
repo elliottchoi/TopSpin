@@ -95,7 +95,7 @@ void CircularDoublyLinkedList<T>::addItem(T val)
 	}
 	else
 	{
-		m_tail = new Node(val, m_tail, m_head);
+		m_tail = new Node(val, m_head, m_tail);
 	}
 	m_size++;
 }
