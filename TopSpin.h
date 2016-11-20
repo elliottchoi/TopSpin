@@ -6,8 +6,8 @@ using namespace std;
 //Abstract Class
 class TopSpinADT {
 public:
-	virtual void shiftLeft(int) = 0;
-	virtual void shiftRight(int) = 0;
+	virtual void shiftLeft() = 0;
+	virtual void shiftRight() = 0;
 	virtual void spin() = 0;
 	virtual bool isSolved() = 0;
 };
@@ -38,35 +38,124 @@ public:
 	//Top spin member variables
 	int gameSize = 0;
 	int mechanismSpinSize = 0;
-	Node  *mechanismStart = 0;
-	Node *mechanismEnd = 0;
 	CircularDoublyLinkedList<int>board; 
+	
 	//Top Spin Functions
 	TopSpin(int size, int spinSize);
-	int getSize();
+	int getSize()const;
 	//Overriding functions 
-	virtual void shiftLeft(int numberOfShifts);
-	virtual void shiftRight(int numberOfShifts);
+	virtual void shiftLeft();
+	virtual void shiftRight();
 	virtual void spin();
 	virtual bool isSolved();
-
-
-//Iterator Class
-public:
-	class Iterator {// iterators are used for efficient traversal of linked lists
-	private:
-		Node* m_ptr;    // an iterator hides a pointer to node
-	public:
-		Iterator(Node* ptr) { m_ptr = ptr; }
-		void operator++ () { m_ptr = m_ptr->next; } // for forward traversing, e,g, Iterator i=begin(); ... ++i;
-		bool operator != (const Iterator& b) { return m_ptr != b.m_ptr; }
-		int operator *() { return m_ptr->Value; }
-		int getValue() { return m_ptr->Value; }
-		void setValue(int val) { m_ptr->Value = val; }
-	};
-	// linked list objects create forward-traversal iterators using the two functions below
-	Iterator begin() { return Iterator(mechanismStart); }
-	Iterator end() { return Iterator(mechanismEnd); }
+	//Operator Overloading
+	friend ostream &operator<<(ostream &os, const TopSpin&s);
 };
 
+
+
+TopSpin::TopSpin(int size, int spinSize)
+{
+	//Checks params if they are within bounds
+	if (size<1 || spinSize>size)
+	{
+		cout << "Invalid Value, Game Size must be larger than 1, and spinsize cannot exceed Game Size" << endl;
+		gameSize = 20;
+		spinSize = 4;
+	}
+	//Adjust params to user inputted params
+	else
+	{
+		gameSize = size;
+		mechanismSpinSize = spinSize;
+	}
+
+	//Adding values to List
+	for (int x = 1; x <= size; x++)
+	{
+		board.addItem(x);
+	}
+}
+int TopSpin::getSize()const
+{
+	return gameSize;
+}
+//Setting Shifts
+void TopSpin::shiftLeft()
+{
+	board.move_head(0);
+}
+void TopSpin::shiftRight()
+{
+	board.move_head(1);
+}
+void TopSpin::spin()
+{
+	//Get two Iterators that will transverse the list 
+	CircularDoublyLinkedList<int>::Iterator front(board.getHead());
+	CircularDoublyLinkedList <int>::Iterator spinEnd(board.getHead());
+
+	for (int x = 1; x < mechanismSpinSize; x++)
+	{
+		//Positions the end node to nth node of the spin mechanism 
+		spinEnd++;
+	}
+
+	//Only need to transvere 1/2 of the list 
+	for (int x = 0; x < ((mechanismSpinSize / 2) - 1); x++)
+	{
+		//Set temp val
+		int swapVal = front.getValue();
+		//Switch two iterators
+		front.setValue(spinEnd.getValue());
+		spinEnd.setValue(swapVal);
+		//Close the gap between the iterators 
+		++front;
+		--spinEnd;
+	}
+}
+bool TopSpin::isSolved()
+{
+	//Get the front of the list
+	CircularDoublyLinkedList<int>::Iterator begin(board.getHead());
+	bool isFound = 0;
+
+	//Finding the position of 1 in the LinkedList
+	while (!isFound)
+	{
+		if (begin.getValue() == 1)
+		{
+			isFound = 1;
+		}
+		else
+		{
+			begin++;
+		}
+	}
+
+	//Now check for pos 2.....gameSize
+	begin++;
+	int reverseCounter = gameSize;
+	for (int check = 2; check <= gameSize; check++, begin++, reverseCounter--)
+	{
+		if (check != begin.getValue() && reverseCounter != begin.getValue())
+		{
+			return 0;
+		}
+	}
+	cout << "Congradulations! You win!" << endl;
+	return 1;
+}
+
+//Overload operator
+ostream &operator << (ostream &os, const TopSpin& ts)
+{
+	CircularDoublyLinkedList<int>::Iterator start = (ts.board).begin();
+	for (int x = 0; x < ts.gameSize; x++, ++start)
+	{
+		os << start.getValue() << " ";
+		cout << endl;
+		return os;
+	}
+}
 
