@@ -150,19 +150,19 @@ bool TopSpin::isSolved()
 ostream& operator << (ostream& os, const TopSpin& ts)
 {
 	CircularDoublyLinkedList<int>::Iterator start= (ts.board).begin();
-	//output stuff dont care that much
+	//Syntax creating box 
 	cout << "|-";
 	for (int x = 0; x < ts.mechansimSpinSize; x++)
 		cout << "---";
 	cout << "|" << endl;
 
+	//Adds | for begin and end of spin mechnaism 
 	for (int x = 0; x < ts.gameSize; x++, ++start)
 	{
 		if (x == 0 || x==ts.mechansimSpinSize)
 			cout << "| ";
 		os << start.getValue() << " "; //output a value that is stored in node
 	}
-	//output stuff dont care that much
 	cout << endl;
 	cout << "|-";
 	for (int x = 0; x < ts.mechansimSpinSize; x++)
