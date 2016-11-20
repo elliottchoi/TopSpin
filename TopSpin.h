@@ -147,23 +147,26 @@ bool TopSpin::isSolved()
 	return 1;
 }
 
-//Overload operator
-ostream &operator << (ostream &os, const TopSpin& ts)
+ostream& operator << (ostream& os, const TopSpin& ts)
 {
-	CircularDoublyLinkedList<int>::Iterator start = (ts.board).begin();
-	cout << "|| ";
-	for (int x = 0; x < ts.mechanismSpinSize; ++x, ++start)
+	CircularDoublyLinkedList<int>::Iterator start= (ts.board).begin();
+	//output stuff dont care that much
+	cout << "|-";
+	for (int x = 0; x < ts.mechansimSpinSize; x++)
+		cout << "---";
+	cout << "|" << endl;
+
+	for (int x = 0; x < s.gameSize; x++, ++start)
 	{
-		os << start.getValue() << " ";
-		return os;
+		if (x == 0 || x==ts.mechansimSpinSize)
+			cout << "| ";
+		os << start.getValue() << " "; //output a value that is stored in node
 	}
-	cout << " || ";
-	++start;
-	int newStart = ts.mechanismSpinSize;
-	newStart++; 
-	for (int x = newStart; x < ts.gameSize; ++x, ++start)
-	{
-		os << start.getValue()<<" ";
-	}
-	return os; 
+	//output stuff dont care that much
+	cout << endl;
+	cout << "|-";
+	for (int x = 0; x < ts.mechansimSpinSize; x++)
+		cout << "---";
+	cout << "|" << endl;
+	return os;
 }
