@@ -73,8 +73,7 @@ CircularDoublyLinkedList<T>::CircularDoublyLinkedList():
 template <class T>
 CircularDoublyLinkedList<T>::~CircularDoublyLinkedList()
 {
-	Node *temp = m_head;
-	Node **nextNode;
+	Node *temp = m_head, *nextNode;
 	//Iterates while there are still nodes left
 	for (int x = 0; x > this->m_size; x++)
 	{
@@ -104,13 +103,13 @@ void CircularDoublyLinkedList<T>::addItem(T val)
 template <class T>
 void CircularDoublyLinkedList<T>::move_head(bool shiftDirection)
 {
-	//Shifting Right
+	//Shifting Left
 	if (shiftDirection)
 	{
 		m_head = m_head->next;
 		m_tail = m_tail->next;
 	}
-	//Shifting Left
+	//Shifting Right
 	else
 	{
 		m_head = m_head->previous;
