@@ -71,7 +71,7 @@ TopSpin::TopSpin(int size, int spinSize)
 	}
 
 	//Adding values to List
-	for (int x = 1; x <= size; x++)
+	for (int x = 1; x <= gameSize; x++)
 	{
 		board.addItem(x);
 	}
@@ -83,11 +83,11 @@ int TopSpin::getSize()const
 //Setting Shifts
 void TopSpin::shiftLeft()
 {
-	board.move_head(0);
+	board.move_head(1);
 }
 void TopSpin::shiftRight()
 {
-	board.move_head(1);
+	board.move_head(0);
 }
 void TopSpin::spin()
 {
@@ -102,7 +102,7 @@ void TopSpin::spin()
 	}
 
 	//Only need to transvere 1/2 of the list 
-	for (int x = 0; x < ((mechanismSpinSize / 2) - 1); x++)
+	for (int x = 0; x < (mechanismSpinSize / 2); x++)
 	{
 		//Set temp val
 		int swapVal = front.getValue();
@@ -126,6 +126,7 @@ bool TopSpin::isSolved()
 		if (begin.getValue() == 1)
 		{
 			isFound = 1;
+			//cout << "Found node 1" << endl;
 		}
 		else
 		{
@@ -135,38 +136,42 @@ bool TopSpin::isSolved()
 
 	//Now check for pos 2.....gameSize
 	++begin;
-	int reverseCounter = gameSize;
-	for (int check = 2; check <= gameSize; check++, ++begin, reverseCounter--)
+	for (int check = 2; check <= gameSize; check++, ++begin)
 	{
-		if (check != begin.getValue() && reverseCounter != begin.getValue())
+		if (check != begin.getValue())
 		{
-			return 0;
+			for (int reverseCounter = gameSize; reverseCounter > 1; reverseCounter--, ++begin)
+			{
+				if (reverseCounter!=begin.getValue())
+				{
+					return 0;
+				}
+			}
 		}
 	}
 	cout << "Congradulations! You win!" << endl;
 	return 1;
 }
-
 ostream& operator << (ostream& os, const TopSpin& ts)
 {
-	CircularDoublyLinkedList<int>::Iterator start= (ts.board).begin();
+	CircularDoublyLinkedList<int>::Iterator start = (ts.board).begin();
 	//Syntax creating box 
 	cout << "|-";
-	for (int x = 0; x < ts.mechansimSpinSize; x++)
-		cout << "---";
+	for (int x = 0; x < ts.mechanismSpinSize; x++)
+		cout << "--";
 	cout << "|" << endl;
 
 	//Adds | for begin and end of spin mechnaism 
 	for (int x = 0; x < ts.gameSize; x++, ++start)
 	{
-		if (x == 0 || x==ts.mechansimSpinSize)
+		if (x == 0 || x == ts.mechanismSpinSize)
 			cout << "| ";
 		os << start.getValue() << " "; //output a value that is stored in node
 	}
 	cout << endl;
 	cout << "|-";
-	for (int x = 0; x < ts.mechansimSpinSize; x++)
-		cout << "---";
+	for (int x = 0; x < ts.mechanismSpinSize; x++)
+		cout << "--";
 	cout << "|" << endl;
 	return os;
 }
